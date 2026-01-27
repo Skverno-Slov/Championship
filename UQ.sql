@@ -1,0 +1,1 @@
+alter table Championship.dbo.VendingMachine add constraint UQ_VendingMachine_SerialNumber unique(SerialNumber)

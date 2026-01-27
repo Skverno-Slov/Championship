@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.13.35919.96 d17.13
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WEMMApi", "WEMMApi\WEMMApi.csproj", "{FDD9C163-78E0-404B-87CB-67A2D6315689}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WEMMWpf", "WEMM\WEMMWpf.csproj", "{13B8D3A3-065F-45A7-AEE0-45E7AF74B593}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{FDD9C163-78E0-404B-87CB-67A2D6315689}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FDD9C163-78E0-404B-87CB-67A2D6315689}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FDD9C163-78E0-404B-87CB-67A2D6315689}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FDD9C163-78E0-404B-87CB-67A2D6315689}.Release|Any CPU.Build.0 = Release|Any CPU
+		{13B8D3A3-065F-45A7-AEE0-45E7AF74B593}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{13B8D3A3-065F-45A7-AEE0-45E7AF74B593}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{13B8D3A3-065F-45A7-AEE0-45E7AF74B593}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{13B8D3A3-065F-45A7-AEE0-45E7AF74B593}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {3AAC2BF1-054E-41B2-925C-B205A3D89757}
+	EndGlobalSection
+EndGlobal
