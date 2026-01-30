@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace WEMMApi.Models;
+namespace VendingApi.Models;
 
 public partial class User
 {
@@ -22,6 +22,8 @@ public partial class User
     public string? MiddleName { get; set; }
 
     public string? Image { get; set; }
+
+    public virtual ICollection<News> News { get; set; } = new List<News>();
 
     public virtual Role Role { get; set; } = null!;
 

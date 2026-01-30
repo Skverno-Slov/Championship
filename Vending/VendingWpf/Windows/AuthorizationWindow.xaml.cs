@@ -1,6 +1,5 @@
 ﻿using System.Windows;
 using WEMMApi.Controllers;
-using WEMMApi.Contexts;
 using WEMMApi.Dtos;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;

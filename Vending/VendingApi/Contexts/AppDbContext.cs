@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
-using WEMMApi.Models;
+using VendingApi.Models;
 
-namespace WEMMApi.Contexts;
+namespace VendingApi.Contexts;
 
 public partial class AppDbContext : DbContext
 {
@@ -28,11 +28,15 @@ public partial class AppDbContext : DbContext
 
     public virtual DbSet<Model> Models { get; set; }
 
+    public virtual DbSet<News> News { get; set; }
+
     public virtual DbSet<Operator> Operators { get; set; }
 
     public virtual DbSet<PaymentMethod> PaymentMethods { get; set; }
 
     public virtual DbSet<Product> Products { get; set; }
+
+    public virtual DbSet<RefrashToken> RefrashTokens { get; set; }
 
     public virtual DbSet<Role> Roles { get; set; }
 
@@ -142,6 +146,16 @@ public partial class AppDbContext : DbContext
             entity.Property(e => e.Name).HasMaxLength(100);
         });
 
+        modelBuilder.Entity<News>(entity =>
+        {
+            entity.Property(e => e.Message).HasMaxLength(150);
+            entity.Property(e => e.UserId).HasMaxLength(36);
+
+            entity.HasOne(d => d.User).WithMany(p => p.News)
+                .HasForeignKey(d => d.UserId)
+                .HasConstraintName("FK_News_User");
+        });
+
         modelBuilder.Entity<Operator>(entity =>
         {
             entity.ToTable("Operator");
@@ -165,6 +179,23 @@ public partial class AppDbContext : DbContext
             entity.Property(e => e.ProductId).HasMaxLength(36);
             entity.Property(e => e.Description).HasMaxLength(255);
             entity.Property(e => e.Name).HasMaxLength(100);
+        });
+
+        modelBuilder.Entity<RefrashToken>(entity =>
+        {
+            entity
+                .HasNoKey()
+                .ToTable("RefrashToken");
+
+            entity.Property(e => e.StringToken)
+                .HasMaxLength(44)
+                .IsFixedLength();
+            entity.Property(e => e.TokenId).ValueGeneratedOnAdd();
+            entity.Property(e => e.UserId).HasMaxLength(36);
+
+            entity.HasOne(d => d.User).WithMany()
+                .HasForeignKey(d => d.UserId)
+                .HasConstraintName("FK_RefrashToken_User");
         });
 
         modelBuilder.Entity<Role>(entity =>

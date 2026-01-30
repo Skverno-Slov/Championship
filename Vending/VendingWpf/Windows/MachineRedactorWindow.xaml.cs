@@ -7,9 +7,9 @@ using System.Net.Http.Json;
 using WEMMApi.Dtos;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
-using WEMMApi.Models;
 using System.Threading.Tasks;
 using System.Net;
+using VendingApi.Models;
 
 namespace WEMMWpf.Windows
 {

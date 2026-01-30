@@ -1,4 +1,4 @@
-﻿using WEMMApi.Models;
+﻿using VendingApi.Models;
 
 namespace WEMMApi.Dtos
 {

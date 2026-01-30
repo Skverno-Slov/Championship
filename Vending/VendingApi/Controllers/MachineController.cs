@@ -3,9 +3,9 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
-using WEMMApi.Contexts;
+using VendingApi.Models;
 using WEMMApi.Dtos;
-using WEMMApi.Models;
+using VendingApi.Contexts;
 using WEMMApi.Services;
 
 namespace WEMMApi.Controllers

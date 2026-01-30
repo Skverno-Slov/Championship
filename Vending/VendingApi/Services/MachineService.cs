@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using WEMMApi.Contexts;
+using VendingApi.Contexts;
+using VendingApi.Models;
 using WEMMApi.Dtos;
-using WEMMApi.Models;
 
 namespace WEMMApi.Services
 {

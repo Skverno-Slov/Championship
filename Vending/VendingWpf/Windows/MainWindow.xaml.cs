@@ -2,7 +2,6 @@
 using System.Net.Http.Json;
 using System.Windows;
 using System.Windows.Controls;
-using WEMMApi.Contexts;
 using WEMMApi.Dtos;
 using WEMMApi.Services;
 using WEMMWpf;

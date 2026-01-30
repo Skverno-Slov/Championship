@@ -2,7 +2,7 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
-using WEMMApi.Models;
+using VendingApi.Models;
 using WEMMWpf;
 
 namespace WEMMApi.Services

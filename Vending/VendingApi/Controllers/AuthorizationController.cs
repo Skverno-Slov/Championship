@@ -2,7 +2,8 @@
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
 using System.Threading.Tasks;
-using WEMMApi.Contexts;
+using VendingApi.Contexts;
+using VendingApi.Models;
 using WEMMApi.Dtos;
 using WEMMApi.Services;
 

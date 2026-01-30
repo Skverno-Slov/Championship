@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace WEMMApi.Models;
+namespace VendingApi.Models;
 
 public partial class Operator
 {

@@ -1,10 +1,10 @@
 ﻿using Scalar.AspNetCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using WEMMApi.Contexts;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using WEMMWpf;
 using System.IdentityModel.Tokens.Jwt;
+using VendingApi.Contexts;
 
 JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
 
