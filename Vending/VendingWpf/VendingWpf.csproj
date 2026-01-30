@@ -9,14 +9,22 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Images\blueEye.png" />
+    <None Remove="Images\bluelock.png" />
+    <None Remove="Images\bluepencil.png" />
+    <None Remove="Images\bluetrash.png" />
+    <None Remove="Images\blueunlock.png" />
     <None Remove="Images\cart.png" />
     <None Remove="Images\cogs.png" />
     <None Remove="Images\display.png" />
     <None Remove="Images\document.png" />
+    <None Remove="Images\Eyent.png" />
     <None Remove="Images\lock.png" />
     <None Remove="Images\Logo.png" />
+    <None Remove="Images\plus.png" />
     <None Remove="Images\power-off.png" />
     <None Remove="Images\search.png" />
+    <None Remove="Images\share.png" />
     <None Remove="Images\user.png" />
   </ItemGroup>
 
@@ -30,18 +38,26 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\WEMMApi\WEMMApi.csproj" />
+    <ProjectReference Include="..\VendingApi\VendingApi.csproj" />
   </ItemGroup>
 
   <ItemGroup>
+    <Resource Include="Images\blueEye.png" />
+    <Resource Include="Images\bluelock.png" />
+    <Resource Include="Images\bluepencil.png" />
+    <Resource Include="Images\bluetrash.png" />
+    <Resource Include="Images\blueunlock.png" />
     <Resource Include="Images\cart.png" />
     <Resource Include="Images\cogs.png" />
     <Resource Include="Images\display.png" />
     <Resource Include="Images\document.png" />
+    <Resource Include="Images\Eyent.png" />
     <Resource Include="Images\lock.png" />
     <Resource Include="Images\Logo.png" />
+    <Resource Include="Images\plus.png" />
     <Resource Include="Images\power-off.png" />
     <Resource Include="Images\search.png" />
+    <Resource Include="Images\share.png" />
     <Resource Include="Images\user.png" />
   </ItemGroup>
 

@@ -28,7 +28,7 @@
                     <DockPanel>
                         <Image x:Name="AvatarImage" Width="45" DockPanel.Dock="Left"/>
                         <TextBlock x:Name="RoleTextBlock" DockPanel.Dock="Bottom"/>
-                        <TextBlock x:Name="FullNameTextBlock" Text="В. В. Вввввв" Width="200"/>
+                        <TextBlock x:Name="FullNameTextBlock" Width="200"/>
                     </DockPanel>
                 </ComboBoxItem>
                 <ComboBoxItem>
@@ -46,7 +46,7 @@
                 <ComboBoxItem>
                     <DockPanel>
                         <Image Source="/Images/power-off.png" Width="20"/>
-                        <Button Content="Выход"/>
+                        <Button x:Name="LogoutButton" Content="Выход" Click="LogoutButton_Click"/>
                     </DockPanel>
                 </ComboBoxItem>
             </ComboBox>
@@ -69,7 +69,7 @@
             <StackPanel DockPanel.Dock="Bottom">
                 <DockPanel HorizontalAlignment="Left" Width="220">
                     <Image Source="/Images/search.png" Width="20" Margin="5" />
-                    <Button Content="Главная" Style="{StaticResource BurgerMenuText}" HorizontalAlignment="Left"/>
+                    <Button x:Name="MainPageButton" Content="Главная" Style="{StaticResource BurgerMenuText}" HorizontalAlignment="Left" Click="MainPageButton_Click"/>
                 </DockPanel>
                 <DockPanel HorizontalAlignment="Left" Width="220">
                     <Image Source="/Images/display.png" Width="20" Margin="5"/>
@@ -106,8 +106,10 @@
                             Click="AdministrateButton_Click"/>
                 </DockPanel>
                 <StackPanel x:Name="AdministrateStackPanel" Visibility="Collapsed">
-                    <Button Content="Торговые автоматы" Margin="40,0,0,0"
-                            Style="{StaticResource BurgerMenuText}"/>
+                    <Button x:Name="WendingMachinesButton"
+                            Content="Торговые автоматы" Margin="40,0,0,0"
+                            Style="{StaticResource BurgerMenuText}"
+                            Click="WendingMachinesButton_Click"/>
                     <Button Content="Компании" Margin="40,0,0,0"
                             Style="{StaticResource BurgerMenuText}"/>
                     <Button Content="Пользователи" Margin="40,0,0,0"
@@ -119,8 +121,12 @@
                 </StackPanel>
             </StackPanel>
         </DockPanel>
-        <DockPanel DockPanel.Dock="Top">
-            <TextBlock Text="Главная" DockPanel.Dock="Right" Margin="10"/>
+        <DockPanel DockPanel.Dock="Top" Background="#181818">
+            <TextBlock x:Name="RouteTextBlock"
+                       Text="Главная"
+                       DockPanel.Dock="Right"
+                       Margin="10"
+                       Foreground="Gray"/>
             <Button x:Name="BurgerMenuButtonHidden" Content="≡"
                     Height="40"
                     Background="#181818"
@@ -128,8 +134,10 @@
                     FontSize="30"
                     Width="40"
                     DockPanel.Dock="Left" Click="BurgerMenuButton_Click"/>
-            <TextBlock Text="ООО Торговые автоматы" VerticalAlignment="Center" Margin="10"/>
+            <TextBlock Text="ООО Торговые автоматы" VerticalAlignment="Center"
+                       FontSize="16" Margin="10"
+                       Foreground="White"/>
         </DockPanel>
-        <Frame x:Name="MainFrame"/>
+        <Frame x:Name="MainFrame" Background="LightGray"/>
     </DockPanel>
 </Window>

@@ -19,9 +19,37 @@ namespace WEMMWpf.Windows
     /// </summary>
     public partial class AuthorizationWindow : Window
     {
+        private HttpClient _client = new();
+
         public AuthorizationWindow()
         {
             InitializeComponent();
+        }
+
+        private void OpenMainWindow()
+        {
+            var window = new MainWindow();
+            window.Show();
+            Close();
+        }
+
+        private static async Task SendRequest(HttpResponseMessage response)
+        {
+            var result = await response.Content.ReadFromJsonAsync<TokenResponce>();
+
+            UserSession.Instance.Jwt = result.JwtToken;
+        }
+
+        private async Task<HttpResponseMessage> CreateResponce(string email, string password)
+        {
+            var request = new LoginRequest()
+            {
+                Login = email,
+                Password = password
+            };
+
+            var response = await _client.PostAsJsonAsync("Token", request);
+            return response;
         }
 
         private async void LoginButton_Click(object sender, RoutedEventArgs e)
@@ -36,26 +64,13 @@ namespace WEMMWpf.Windows
                 if (String.IsNullOrWhiteSpace(password))
                     throw new BadHttpRequestException("Введите пароль");
 
-                using HttpClient client = new();
-                client.BaseAddress = new Uri("http://localhost:5076/api/Authorization/");
+                HttpResponseMessage response = await CreateResponce(email, password);
 
-                var request = new LoginRequest()
-                {
-                    Login = email,
-                    Password = password
-                };
-
-                var response = await client.PostAsJsonAsync("Token", request);
                 if (!response.IsSuccessStatusCode)
                     throw new AuthenticationFailedException("Неверный логи или пароль");
 
-                var result = await response.Content.ReadFromJsonAsync<TokenResponce>();
-
-                UserSession.Instance.Jwt = result.JwtToken;
-
-                var window = new MainWindow();
-                window.Show();
-                Close();
+                await SendRequest(response);
+                OpenMainWindow();
             }
             catch (BadHttpRequestException ex)
             {
@@ -65,10 +80,15 @@ namespace WEMMWpf.Windows
             {
                 MessageBox.Show(ex.Message, "Ошибка входа", MessageBoxButton.OK, MessageBoxImage.Error);
             }
-            catch 
+            catch
             {
                 MessageBox.Show("Непредвиденная ошибка");
             }
+        }
+
+        private void AuthorizationWindow_Loaded(object sender, RoutedEventArgs e)
+        {
+            _client.BaseAddress = new Uri("http://localhost:5076/api/Authorization/");
         }
     }
 }

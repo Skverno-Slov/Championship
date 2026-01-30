@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WEMMWpf.Windows"
         mc:Ignorable="d"
-        Title="Вход" Height="450" Width="400">
+        Title="Вход" Height="450" Width="400" Loaded="AuthorizationWindow_Loaded">
     <StackPanel DockPanel.Dock="Top"
                     HorizontalAlignment="Center"
                     Width="400">

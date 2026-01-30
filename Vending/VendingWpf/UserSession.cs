@@ -6,7 +6,7 @@
 
         private UserSession() { }
 
-        public string Jwt { get; set; }
+        public string? Jwt { get; set; }
 
         public static UserSession Instance
         {
