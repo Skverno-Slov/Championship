@@ -93,7 +93,7 @@ namespace WEMMWpf.Windows
             }
             catch (AuthenticationFailedException ex)
             {
-                _notifier?.ShowError(ex.Message);
+                _notifier.ShowError(ex.Message);
             }
             catch
             {

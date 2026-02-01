@@ -285,17 +285,6 @@ namespace WEMMWpf.Pages
 
         private void LoadSalesChart()
         {
-            var daym9 = CalculateTotallByDay(-9);
-            var daym8 = CalculateTotallByDay(-8);
-            var daym7 = CalculateTotallByDay(-7);
-            var daym6 = CalculateTotallByDay(-6);
-            var daym5 = CalculateTotallByDay(-5);
-            var daym4 = CalculateTotallByDay(-4);
-            var daym3 = CalculateTotallByDay(-3);
-            var daym2 = CalculateTotallByDay(-2);
-            var daym1 = CalculateTotallByDay(-1);
-            var daym0 = CalculateTotallByDay();
-
             decimal[] sales =
             {
                 CalculateTotallByDay(-9),
