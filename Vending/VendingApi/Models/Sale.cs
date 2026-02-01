@@ -15,6 +15,8 @@ public partial class Sale
 
     public DateTime Timestamp { get; set; }
 
+    public decimal TotalPrice { get; set; }
+
     public virtual VendingMachine Machine { get; set; } = null!;
 
     public virtual PaymentMethod PaymentMethod { get; set; } = null!;

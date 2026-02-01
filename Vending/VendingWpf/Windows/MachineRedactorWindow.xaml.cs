@@ -10,6 +10,10 @@ using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using System.Net;
 using VendingApi.Models;
+using ToastNotifications;
+using ToastNotifications.Lifetime;
+using ToastNotifications.Position;
+using ToastNotifications.Messages;
 
 namespace WEMMWpf.Windows
 {
@@ -20,23 +24,71 @@ namespace WEMMWpf.Windows
     {
         private HttpClient _client = new();
 
-        private Dictionary<int, string> _timeZones;
+        private Dictionary<short, string> _timeZones;
         private List<WorkMode> _workModes;
         private List<Model> _models;
         private List<Template> _templates;
         private List<MachinePlace> _machinePlaces;
         private List<UserListDto> _users;
-        private List<WorkerListDto> _managers;
-        private List<WorkerListDto> _enginers;
-        private List<WorkerListDto> _technics;
         private List<ServicePriority> _servicePriorities;
         private VendingMachine _vendingMachine;
+
+        private Notifier _successNotifier;
+        private Notifier _warningNotifier;
+        private Notifier _errorNotifier;
 
         public MachineRedactorWindow()
         {
             InitializeComponent();
 
             DataContext = this;
+            CreareNotifications();
+        }
+
+        private void CreareNotifications()
+        {
+            _successNotifier = new Notifier(cfg =>
+            {
+                cfg.PositionProvider = new WindowPositionProvider(
+                    parentWindow: Application.Current.MainWindow,
+                    corner: Corner.TopRight,
+                    offsetX: 10,
+                    offsetY: 10);
+
+                cfg.LifetimeSupervisor = new TimeAndCountBasedLifetimeSupervisor(
+                    notificationLifetime: TimeSpan.FromSeconds(5),
+                    maximumNotificationCount: MaximumNotificationCount.FromCount(3));
+
+                cfg.Dispatcher = Application.Current.Dispatcher;
+            });
+            _warningNotifier = new Notifier(cfg =>
+            {
+                cfg.PositionProvider = new WindowPositionProvider(
+                    parentWindow: Application.Current.MainWindow,
+                    corner: Corner.TopRight,
+                    offsetX: 10,
+                    offsetY: 10);
+
+                cfg.LifetimeSupervisor = new TimeAndCountBasedLifetimeSupervisor(
+                    notificationLifetime: TimeSpan.FromSeconds(7),
+                    maximumNotificationCount: MaximumNotificationCount.FromCount(3));
+
+                cfg.Dispatcher = Application.Current.Dispatcher;
+            });
+            _errorNotifier = new Notifier(cfg =>
+            {
+                cfg.PositionProvider = new WindowPositionProvider(
+                    parentWindow: Application.Current.MainWindow,
+                    corner: Corner.TopRight,
+                    offsetX: 10,
+                    offsetY: 10);
+
+                cfg.LifetimeSupervisor = new TimeAndCountBasedLifetimeSupervisor(
+                    notificationLifetime: TimeSpan.FromSeconds(10),
+                    maximumNotificationCount: MaximumNotificationCount.FromCount(3));
+
+                cfg.Dispatcher = Application.Current.Dispatcher;
+            });
         }
 
         public VendingMachine VendingMachine
@@ -59,7 +111,7 @@ namespace WEMMWpf.Windows
             }
         }
 
-        public Dictionary<int, string> TimeZones
+        public Dictionary<short, string> TimeZones
         {
             get => _timeZones;
             set
@@ -109,36 +161,6 @@ namespace WEMMWpf.Windows
             }
         }
 
-        public List<WorkerListDto> Managers
-        {
-            get => _managers;
-            set
-            {
-                _managers = value;
-                OnPropertyChanged();
-            }
-        }
-
-        public List<WorkerListDto> Enginers
-        {
-            get => _enginers;
-            set
-            {
-                _enginers = value;
-                OnPropertyChanged();
-            }
-        }
-
-        public List<WorkerListDto> Technics
-        {
-            get => _technics;
-            set
-            {
-                _technics = value;
-                OnPropertyChanged();
-            }
-        }
-
         public List<ServicePriority> ServicePriorities
         {
             get => _servicePriorities;
@@ -167,13 +189,10 @@ namespace WEMMWpf.Windows
                 Models = dependences.Models;
                 Templates = dependences.Templates;
                 Users = dependences.Users;
-                Managers = dependences.Managers;
-                Enginers = dependences.Enginers;
-                Technics = dependences.Technics;
                 MachinePlaces = dependences.MachinePlaces;
                 ServicePriorities = dependences.ServicePriorities;
 
-                var timeZones = new Dictionary<int, string>
+                var timeZones = new Dictionary<short, string>
             {
                 { -12, "UTC-12" },
                 { -11, "UTC-11" },
@@ -234,8 +253,35 @@ namespace WEMMWpf.Windows
             Close();
         }
 
-        private void SaveButton_Click(object sender, RoutedEventArgs e)
+        private async void SaveButton_Click(object sender, RoutedEventArgs e)
         {
+            try
+            {
+                VendingMachine.InstallDate = DateTime.Now;
+                VendingMachine.LastMaintenanceDate = DateTime.Now;
+                VendingMachine.MachineId = Guid.NewGuid().ToString();
+                VendingMachine.CompanyId = 1;
+                VendingMachine.StatusId = 1;
+
+                var responce = await _client.PostAsJsonAsync("Machine", VendingMachine);
+                if (responce.IsSuccessStatusCode)
+                {
+                    _successNotifier.ShowSuccess("Успешно создан");
+                    return;
+                }
+
+                _errorNotifier.ShowError("Ошибка создания");
+                return;
+            }
+            catch (HttpRequestException ex)
+            when(ex.StatusCode == HttpStatusCode.Unauthorized)
+            {
+                _warningNotifier.ShowWarning("Требуется повторный вход");
+            }
+            catch 
+            {
+                _errorNotifier.ShowError("Непредвиденная ошибка");
+            }
         }
     }
 }

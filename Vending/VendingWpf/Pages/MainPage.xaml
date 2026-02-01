@@ -4,12 +4,13 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:WEMMWpf.Pages"
+      xmlns:ScottPlot="clr-namespace:ScottPlot.WPF;assembly=ScottPlot.WPF"
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
       Title="MainPage" Loaded="Page_Loaded">
 
     <Canvas>
-        <DockPanel x:Name="EffishesyDockPanel" Width="400"
+        <DockPanel Width="400"
                HorizontalAlignment="Left"
                VerticalAlignment="Center"
                Background="White"
@@ -18,33 +19,36 @@
                MouseLeftButtonUp="TargetDockPanel_MouseLeftButtonUp"
                Canvas.Left="{Binding EffishesyDockPanelX}"
                Canvas.Top="{Binding EffishesyDockPanelY}">
-            <DockPanel DockPanel.Dock="Top">
-                <StackPanel>
+            <DockPanel x:Name="EffishesyDockPanel" DockPanel.Dock="Top" Height="35" MaxHeight="35">
+                <StackPanel Height="35" MaxHeight="35">
                     <TextBlock Text="Эффективность сети"
                        FontSize="18"
                        Foreground="#1099ff"
                        Margin="5"/>
                 </StackPanel>
                 <StackPanel DockPanel.Dock="Right"
-                        Orientation="Horizontal"
-                        VerticalAlignment="Center"
-                        HorizontalAlignment="Right"
-                        Margin="0,0,5,0">
-                    <Button x:Name="EffishesyHideButton" Width="20">
-                        <Image Source="/Images/blueEye.png"/>
+                            Orientation="Horizontal"
+                            VerticalAlignment="Center"
+                            HorizontalAlignment="Right"
+                            Margin="0,0,5,0"
+                            Height="35" MaxHeight="35">
+                    <Button x:Name="EffishesyHideButton" Width="20" Click="EffishesyHideButton_Click">
+                        <Image x:Name="HideEffishesyImage" Source="/Images/blueEye.png" VerticalAlignment="Center"/>
                     </Button>
                 </StackPanel>
             </DockPanel>
+            <TextBlock x:Name="EfficiencyTextBlock" Text="У вас нет работающих ТА" VerticalAlignment="Bottom" HorizontalAlignment="Center" DockPanel.Dock="Bottom"/>
+            <ScottPlot:WpfPlot x:Name="EfficiencyPlot" Margin="5" Width="389" Height="200"/>
         </DockPanel>
         <DockPanel x:Name="StateDockPanel" Width="400"
-       HorizontalAlignment="Left"
-       VerticalAlignment="Center"
-       Background="White"
+                   HorizontalAlignment="Left"
+                   VerticalAlignment="Center"
+                   Background="White"
                    MouseLeftButtonDown="TargetDockPanel_MouseLeftButtonDown"
                    MouseMove="StateDockPanel_MouseMove"
                    MouseLeftButtonUp="TargetDockPanel_MouseLeftButtonUp"
-       Canvas.Left="{Binding StateDockPanelX}"
-       Canvas.Top="{Binding StateDockPanelY}">
+                   Canvas.Left="{Binding StateDockPanelX}"
+                   Canvas.Top="{Binding StateDockPanelY}">
             <DockPanel DockPanel.Dock="Top">
                 <StackPanel>
                     <TextBlock Text="Состояние сети"
@@ -57,11 +61,13 @@
                 VerticalAlignment="Center"
                 HorizontalAlignment="Right"
                 Margin="0,0,5,0">
-                    <Button x:Name="StateHideButton" Width="20">
-                        <Image Source="/Images/blueEye.png"/>
+                    <Button x:Name="StateHideButton" Width="20" VerticalAlignment="Center" Click="StateHideButton_Click">
+                        <Image x:Name="HideStateImage" Source="/Images/blueEye.png"/>
                     </Button>
                 </StackPanel>
             </DockPanel>
+            <TextBlock x:Name="StateTextBlock" Text="У вас нет работающих ТА" VerticalAlignment="Bottom" HorizontalAlignment="Center" DockPanel.Dock="Bottom"/>
+            <ScottPlot:WpfPlot x:Name="StatePlot" Margin="5" Width="389" Height="200"/>
         </DockPanel>
         <DockPanel x:Name="SummaryDockPanel" Width="400"
 HorizontalAlignment="Left"
@@ -84,11 +90,43 @@ Canvas.Top="{Binding SummaryDockPanelY}">
          VerticalAlignment="Center"
          HorizontalAlignment="Right"
          Margin="0,0,5,0">
-                    <Button x:Name="SummaryHideButton" Width="20">
-                        <Image Source="/Images/blueEye.png"/>
+                    <Button x:Name="SummaryHideButton" Width="20" Click="SummaryHideButton_Click">
+                        <Image x:Name="HideSummaryImage" Source="/Images/blueEye.png"/>
                     </Button>
                 </StackPanel>
             </DockPanel>
+            <StackPanel x:Name="SummaryDodyStackPanel">
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="Денег в ТА" Margin="2"/>
+                    <TextBlock Text="{Binding SaleToday.Balance}" HorizontalAlignment="Left" Margin="2"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="Сдача в ТА" Margin="2"/>
+                    <TextBlock Text="{Binding SaleToday.Change}" HorizontalAlignment="Left" Margin="2"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="Выручка, сегодня" Margin="2"/>
+                    <TextBlock Text="{Binding SaleToday.ProfitToday}" HorizontalAlignment="Left" Margin="2"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="Выручка, вчера" Margin="2"/>
+                    <TextBlock Text="{Binding SaleToday.ProfitYestarday}" HorizontalAlignment="Left" Margin="2"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="Инкассированно, сегодня" Margin="2"/>
+                    <TextBlock Text="{Binding SaleToday.CollectedToday}" HorizontalAlignment="Left" Margin="2"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="Инкассированно, вчера" Margin="2"/>
+                    <TextBlock Text="{Binding SaleToday.CollectedYestarday}" HorizontalAlignment="Left" Margin="2"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="Обслужено ТА сег./вчера" Margin="2"/>
+                    <TextBlock Text="{Binding SaleToday.ServedToday}" HorizontalAlignment="Left" Margin="2"/>
+                    <TextBlock Text=" / " HorizontalAlignment="Left" Margin="2"/>
+                    <TextBlock Text="{Binding TotalMachines}" HorizontalAlignment="Left" Margin="2"/>
+                </StackPanel>
+            </StackPanel>
         </DockPanel>
         <DockPanel x:Name="NewsDockPanel" Width="400"
 HorizontalAlignment="Left"
@@ -111,11 +149,35 @@ Canvas.Top="{Binding NewsDockPanelY}">
          VerticalAlignment="Center"
          HorizontalAlignment="Right"
          Margin="0,0,5,0">
-                    <Button x:Name="NewsHideButton" Width="20">
-                        <Image Source="/Images/blueEye.png"/>
+                    <Button x:Name="NewsHideButton" Width="20" Click="NewsHideButton_Click">
+                        <Image x:Name="HideNewsImage" Source="/Images/blueEye.png"/>
                     </Button>
                 </StackPanel>
             </DockPanel>
+            <DataGrid x:Name="NewsDataGrid"
+                      HeadersVisibility="None"
+                      ItemsSource="{Binding News}"
+                      IsReadOnly="True"
+                      AutoGenerateColumns="False"
+                      CanUserAddRows="False"
+                      CanUserDeleteRows="False"
+                      Width="390" Height="200"
+                      BorderThickness="0">
+                <DataGrid.Resources>
+                    <Style TargetType="TextBlock" x:Key="WrapStyle">
+                        <Setter Property="TextWrapping" Value="Wrap"/>
+                        <Setter Property="Margin" Value="5"/>
+                    </Style>
+                </DataGrid.Resources>
+                <DataGrid.Columns>
+                    <DataGridTextColumn Binding="{Binding EventDate}"
+                                        ElementStyle="{StaticResource WrapStyle}"
+                                        MaxWidth="150"/>
+                    <DataGridTextColumn Binding="{Binding Message}"
+                                        ElementStyle="{StaticResource WrapStyle}"
+                                        MaxWidth="240"/>
+                </DataGrid.Columns>
+            </DataGrid>
         </DockPanel>
         <DockPanel x:Name="SalesDockPanel" Width="800"
 HorizontalAlignment="Left"
@@ -132,17 +194,23 @@ Canvas.Top="{Binding SalesDockPanelY}">
         FontSize="18"
         Foreground="#1099ff"
         Margin="5"/>
+                    <TextBlock x:Name="DatesTextBlock"/>
+                    <StackPanel x:Name="SalesVariationsStackPanel" Orientation="Horizontal">
+                        <Button Width="100" Content="По сумме" Margin="5"/>
+                        <Button Width="100" Content="По колличеству" Margin="5"/>
+                    </StackPanel>
                 </StackPanel>
                 <StackPanel DockPanel.Dock="Right"
          Orientation="Horizontal"
          VerticalAlignment="Center"
          HorizontalAlignment="Right"
          Margin="0,0,5,0">
-                    <Button x:Name="SalesHideButton" Width="20">
-                        <Image Source="/Images/blueEye.png"/>
+                    <Button x:Name="SalesHideButton" Width="20" Click="SalesHideButton_Click">
+                        <Image x:Name="HideSalesImage" Source="/Images/blueEye.png"/>
                     </Button>
                 </StackPanel>
             </DockPanel>
+            <ScottPlot:WpfPlot x:Name="SalesPlot" Margin="5" Width="700" Height="200"/>
         </DockPanel>
     </Canvas>
 </Page>

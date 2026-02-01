@@ -138,6 +138,6 @@
                        FontSize="16" Margin="10"
                        Foreground="White"/>
         </DockPanel>
-        <Frame x:Name="MainFrame" Background="LightGray"/>
+        <Frame x:Name="MainFrame" Background="LightGray" NavigationUIVisibility="Hidden"/>
     </DockPanel>
 </Window>

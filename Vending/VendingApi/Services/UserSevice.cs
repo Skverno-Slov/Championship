@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using System.Threading.Tasks;
 using VendingApi.Contexts;
 using VendingApi.Models;
 using WEMMApi.Dtos;
@@ -11,11 +12,14 @@ namespace WEMMApi.Services
 
         public async Task<User?> GetUserByEmailAsync(string email)
         {
-            if (!IsUserExists(email))
-                return null;
-
             return await _context.Users.Include(u => u.Role)
                 .FirstOrDefaultAsync(u => u.Email == email);
+        }
+
+        public async Task<User?> GetUserByIdAsync(string id)
+        {
+            return await _context.Users
+                .FirstOrDefaultAsync(u => u.UserId == id);
         }
 
         public async Task<UserMiniProfileDto?> GetUserMiniProfileByIdAsync(string id)
@@ -35,5 +39,6 @@ namespace WEMMApi.Services
 
         public bool IsUserExists(string email)
             => _context.Users.Any(u => u.Email == email);
+
     }
 }

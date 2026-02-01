@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WEMMWpf.Windows"
         mc:Ignorable="d"
-        Title="Создание ТА" Height="650" Width="800" Loaded="MachineRedactorWindow_Loaded">
+        Title="Создание ТА" Height="620" Width="800" Loaded="MachineRedactorWindow_Loaded">
     <DockPanel>
         <StackPanel DockPanel.Dock="Top" Background="LightGray">
             <TextBlock Text="Создание торгового автомата"
@@ -120,21 +120,9 @@
                 <TextBlock Text="Шаблон уведомлений"/>
                 <ComboBox ItemsSource="{Binding Templates}" DisplayMemberPath="Name" SelectedValuePath="TemplateId" SelectedValue="{Binding VendingMachine.NotificationTemplateId}"/>
             </StackPanel>
-            <StackPanel Margin="5,5,5,5" Grid.Row="5" Grid.Column="0">
+            <StackPanel Margin="5,5,5,5" Grid.Row="6" Grid.Column="0">
                 <TextBlock Text="Клиент"/>
                 <ComboBox ItemsSource="{Binding Users}" DisplayMemberPath="LastName" SelectedValuePath="UserId" SelectedValue="{Binding VendingMachine.UserId}"/>
-            </StackPanel>
-            <StackPanel Margin="5,5,5,5" Grid.Row="5" Grid.Column="1">
-                <TextBlock Text="Менеджер"/>
-                <ComboBox ItemsSource="{Binding Managers}" DisplayMemberPath="LastName" SelectedValuePath="UserId" SelectedValue="{Binding VendingMachine.UserId}"/>
-            </StackPanel>
-            <StackPanel Margin="5,5,5,5" Grid.Row="5" Grid.Column="2">
-                <TextBlock Text="Инженер"/>
-                <ComboBox ItemsSource="{Binding Enginers}" DisplayMemberPath="LastName" SelectedValuePath="UserId" SelectedValue="{Binding VendingMachine.UserId}"/>
-            </StackPanel>
-            <StackPanel Margin="5,5,5,5" Grid.Row="6" Grid.Column="0">
-                <TextBlock Text="Техник-оператор"/>
-                <ComboBox ItemsSource="{Binding Technics}" DisplayMemberPath="LastName" SelectedValuePath="UserId" SelectedValue="{Binding VendingMachine.UserId}"/>
             </StackPanel>
             <StackPanel Margin="5,5,5,5" Grid.Row="6" Grid.Column="1" Grid.ColumnSpan="2">
                 <TextBlock Text="Платёжная система *"/>
@@ -180,7 +168,7 @@
             </StackPanel>
             <StackPanel Margin="5,5,5,5" Grid.Row="10" Grid.Column="0" Grid.ColumnSpan="3">
                 <TextBlock Text="Примечания"/>
-                <TextBox AcceptsReturn="True" Height="54"/>
+                <TextBox AcceptsReturn="True" Height="54" Text="{Binding VendingMachine.Notes}"/>
             </StackPanel>
         </Grid>
     </DockPanel>

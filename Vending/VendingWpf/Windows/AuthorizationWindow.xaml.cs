@@ -1,15 +1,14 @@
-﻿using System.Windows;
-using WEMMApi.Controllers;
-using WEMMApi.Dtos;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+﻿using Azure.Identity;
 using Microsoft.AspNetCore.Http;
-using System.Security.Policy;
 using System.Net.Http;
-using WEMMApi.Services;
 using System.Net.Http.Json;
-using Azure.Identity;
+using System.Windows;
+using ToastNotifications;
+using ToastNotifications.Lifetime;
+using ToastNotifications.Position;
+using ToastNotifications.Messages;
 using WEMM;
+using WEMMApi.Dtos;
 
 namespace WEMMWpf.Windows
 {
@@ -20,9 +19,26 @@ namespace WEMMWpf.Windows
     {
         private HttpClient _client = new();
 
+        private Notifier _notifier;
+
         public AuthorizationWindow()
         {
             InitializeComponent();
+
+            _notifier = new Notifier(cfg =>
+            {
+                cfg.PositionProvider = new WindowPositionProvider(
+                    parentWindow: Application.Current.MainWindow,
+                    corner: Corner.TopRight,
+                    offsetX: 10,
+                    offsetY: 10);
+
+                cfg.LifetimeSupervisor = new TimeAndCountBasedLifetimeSupervisor(
+                    notificationLifetime: TimeSpan.FromSeconds(10),
+                    maximumNotificationCount: MaximumNotificationCount.FromCount(3));
+
+                cfg.Dispatcher = Application.Current.Dispatcher;
+            });
         }
 
         private void OpenMainWindow()
@@ -47,7 +63,7 @@ namespace WEMMWpf.Windows
                 Password = password
             };
 
-            var response = await _client.PostAsJsonAsync("Token", request);
+            var response = await _client.PostAsJsonAsync("Login", request);
             return response;
         }
 
@@ -73,15 +89,15 @@ namespace WEMMWpf.Windows
             }
             catch (BadHttpRequestException ex)
             {
-                MessageBox.Show(ex.Message, "Ошибка входа", MessageBoxButton.OK, MessageBoxImage.Error);
+                _notifier.ShowError(ex.Message);
             }
             catch (AuthenticationFailedException ex)
             {
-                MessageBox.Show(ex.Message, "Ошибка входа", MessageBoxButton.OK, MessageBoxImage.Error);
+                _notifier?.ShowError(ex.Message);
             }
             catch
             {
-                MessageBox.Show("Непредвиденная ошибка");
+                _notifier.ShowError("Непредвиденная ошибка");
             }
         }
 

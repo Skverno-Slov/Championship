@@ -148,6 +148,7 @@ public partial class AppDbContext : DbContext
 
         modelBuilder.Entity<News>(entity =>
         {
+            entity.Property(e => e.EventDate).HasDefaultValueSql("(getdate())");
             entity.Property(e => e.Message).HasMaxLength(150);
             entity.Property(e => e.UserId).HasMaxLength(36);
 
@@ -212,6 +213,7 @@ public partial class AppDbContext : DbContext
 
             entity.Property(e => e.MachineId).HasMaxLength(36);
             entity.Property(e => e.ProductId).HasMaxLength(36);
+            entity.Property(e => e.TotalPrice).HasColumnType("decimal(19, 4)");
 
             entity.HasOne(d => d.Machine).WithMany(p => p.Sales)
                 .HasForeignKey(d => d.MachineId)

@@ -1,4 +1,6 @@
-﻿namespace WEMMApi.Dtos
+﻿using VendingApi.Models;
+
+namespace WEMMApi.Dtos
 {
     public class LoginRequest
     {

@@ -9,7 +9,7 @@
       Title="WendingMachinesPage" Loaded="MachinePage_Loaded">
 
     <Canvas>
-        <DockPanel x:Name="WendingMachinesDockPanel" Width="715"
+        <DockPanel x:Name="WendingMachinesDockPanel" Width="896" Height="650"
                    HorizontalAlignment="Left"
                    VerticalAlignment="Center"
                    Background="White"
@@ -19,7 +19,7 @@
                    Canvas.Left="{Binding WendingMachineDockPanelX}"
                    Canvas.Top="{Binding WendingMachineDockPanelY}">
             <!--Canvas.Left="{Binding WendingMachineDockPanelX}"
-                    Canvas.Top="{Binding WendingMachineDockPanelY}">-->
+Canvas.Top="{Binding WendingMachineDockPanelY}">-->
             <DockPanel DockPanel.Dock="Top">
                 <StackPanel>
                     <TextBlock Text="Торговые автоматы"
@@ -104,17 +104,17 @@
                     <DataGrid.Columns>
                         <DataGridTextColumn Header="ID" Binding="{Binding SerialNumber}" MaxWidth="60"
                                         ElementStyle="{StaticResource WrapStyle}"/>
-                        <DataGridTextColumn Header="Название автомата" Binding="{Binding Name}" MaxWidth="120" 
+                        <DataGridTextColumn Header="Название автомата" Binding="{Binding Name}" MaxWidth="160" 
                                         ElementStyle="{StaticResource WrapStyle}"/>
-                        <DataGridTextColumn Header="Модель" Binding="{Binding ModelName}" MaxWidth="80"
+                        <DataGridTextColumn Header="Модель" Binding="{Binding ModelName}" MaxWidth="100"
                                         ElementStyle="{StaticResource WrapStyle}"/>
-                        <DataGridTextColumn Header="Компания" Binding="{Binding CompanyName}" MaxWidth="80"
+                        <DataGridTextColumn Header="Компания" Binding="{Binding CompanyName}" MaxWidth="100"
                                         ElementStyle="{StaticResource WrapStyle}"/>
-                        <DataGridTextColumn Header="Модем" Binding="{Binding Modem}" MaxWidth="70"
+                        <DataGridTextColumn Header="Модем" Binding="{Binding Modem}" MaxWidth="71"
                                         ElementStyle="{StaticResource WrapStyle}"/>
-                        <DataGridTextColumn Header="Адрес / Место" Binding="{Binding FullAddress}" MaxWidth="120"
+                        <DataGridTextColumn Header="Адрес / Место" Binding="{Binding FullAddress}" MaxWidth="170"
                                         ElementStyle="{StaticResource WrapStyle}"/>
-                        <DataGridTextColumn Header="В работе с" Binding="{Binding InstallDate}" MaxWidth="110"
+                        <DataGridTextColumn Header="В работе с" Binding="{Binding InstallDate, StringFormat='dd.MM.yyyy'}" MaxWidth="160"
                                         ElementStyle="{StaticResource WrapStyle}"/>
                         <DataGridTemplateColumn Header="Действия" MaxWidth="75">
                             <DataGridTemplateColumn.CellTemplate>

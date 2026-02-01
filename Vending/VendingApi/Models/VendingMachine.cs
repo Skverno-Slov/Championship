@@ -67,9 +67,11 @@ public partial class VendingMachine
 
     public string? Status { get; set; }
 
-    public virtual Company Company { get; set; } = null!;
+    public bool IsServed { get; set; }
 
-    public virtual Template CriticalThresholdTemplate { get; set; } = null!;
+    public virtual Company? Company { get; set; }
+
+    public virtual Template? CriticalThresholdTemplate { get; set; }
 
     public virtual ICollection<MachineOperator> MachineOperators { get; set; } = new List<MachineOperator>();
 
@@ -77,19 +79,19 @@ public partial class VendingMachine
 
     public virtual ICollection<Maintenance> Maintenances { get; set; } = new List<Maintenance>();
 
-    public virtual Model Model { get; set; } = null!;
+    public virtual Model? Model { get; set; }
 
-    public virtual Template NotificationTemplate { get; set; } = null!;
+    public virtual Template? NotificationTemplate { get; set; }
 
-    public virtual MachinePlace Place { get; set; } = null!;
+    public virtual MachinePlace? Place { get; set; }
 
-    public virtual ServicePriority Priority { get; set; } = null!;
+    public virtual ServicePriority? Priority { get; set; }
 
     public virtual ICollection<Sale> Sales { get; set; } = new List<Sale>();
 
-    public virtual Status StatusNavigation { get; set; } = null!;
+    public virtual Status? StatusNavigation { get; set; }
 
-    public virtual User User { get; set; } = null!;
+    public virtual User? User { get; set; }
 
-    public virtual WorkMode WorkMode { get; set; } = null!;
+    public virtual WorkMode? WorkMode { get; set; }
 }
