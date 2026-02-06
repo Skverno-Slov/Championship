@@ -16,11 +16,13 @@ namespace WEMMApi.Controllers
     [ApiController]
     public class MachineController(AppDbContext context) : ControllerBase
     {
+        private readonly AppDbContext _context = context;
+
         private readonly MachineService _machineService = new(context);
 
         [HttpGet("Table")]
         [Authorize]
-        public async Task<ActionResult<MashineResponse>> GetMachineDtosAsync([FromQuery] int currentPage, [FromQuery] int pageSize, [FromQuery] string? filter)
+        public async Task<ActionResult<MashineResponse>> GetMachineDtosTableAsync([FromQuery] int currentPage, [FromQuery] int pageSize, [FromQuery] string? filter)
         {
             var result = _machineService.GetMachineDtosQueryByUserId(User.FindFirstValue(ClaimTypes.NameIdentifier));
 
@@ -36,6 +38,85 @@ namespace WEMMApi.Controllers
                 TotalCount = totalCount,
                 MachineDtos = await result.ToListAsync()
             };
+
+            return response;
+        }
+
+        [HttpPost("Monitor")]
+        [Authorize]
+        public async Task<ActionResult<MonitorResponce>> GetMachineDtosMonitorAsync([FromBody] MonitorRequest request)
+        {
+            var result = await _context.VendingMachines.Include(m => m.Model)
+                .Include(m => m.StatusNavigation)
+                .Where(m => m.UserId == User.FindFirstValue(ClaimTypes.NameIdentifier))
+                .ToListAsync();
+
+            var response = new MonitorResponce();
+            foreach (var machine in result)
+            {
+                response.TotalContributedMoney += machine.ContributedMoney;
+                response.TotalChange += machine.CoinsChange + machine.BillsChange;
+            }
+
+            response.TotalBroken = result.Where(m => m.StatusNavigation.Name == "Сломан").Count();
+            response.TotalServing = result.Where(m => m.StatusNavigation.Name == "Обслуживается").Count();
+            response.TotalWorking = result.Where(m => m.StatusNavigation.Name == "Работает").Count();
+
+            var filteredResult = new List<VendingMachine>();
+
+            if (request.GeneralFilters is not null)
+                foreach (var filter in request.GeneralFilters)
+                    filteredResult.AddRange(result.Where(m => m.StatusNavigation.Name == filter));
+
+            var offerFilters = request.OfferFilters;
+
+            var sales = await _context.Sales.ToListAsync();
+
+            if (offerFilters is not null || offerFilters?.Count != 0)
+            {
+                if (offerFilters.Any(f => f == "isDisconected"))
+                    filteredResult = filteredResult.Where(m => !m.IsConnection).ToList();
+                if (offerFilters.Any(f => f == "HasHardwareProblems"))
+                    filteredResult = filteredResult.Where(m => m.HasHardwareProblems).ToList();
+                if (offerFilters.Any(f => f == "isNoSales"))
+                    filteredResult = filteredResult.Where(m => sales.Any(s => s.MachineId == m.MachineId)).ToList();
+                if (offerFilters.Any(f => f == "isNoEncashment"))
+                    filteredResult = filteredResult.Where(m => !m.IsEncanced).ToList();
+                if (offerFilters.Any(f => f == "isNoService"))
+                    filteredResult = filteredResult.Where(m => !m.IsServed).ToList();
+                if (offerFilters.Any(f => f == "isNoFillup"))
+                    filteredResult = filteredResult.Where(m => !m.IsFilledUp).ToList();
+                if (offerFilters.Any(f => f == "isFewChange"))
+                    filteredResult = filteredResult.Where(m => (m.CoinsChange + m.BillsChange) < 200).ToList();
+                if (offerFilters.Any(f => f == "isFewGoods"))
+                    filteredResult = filteredResult.Where(m => m.TotallGoods < 40).ToList();
+            }
+
+            var machines = filteredResult.Select(m => new MachineMonitorDto()
+            {
+                MachineId = m.MachineId,
+                SerialNumber = m.SerialNumber,
+                Name = m.Name,
+                Location = m.Location,
+                UserId = m.UserId,
+                ModelName = m.Model.Name,
+                LastMaintenanceDate = m.LastMaintenanceDate,
+                ContributedMoney = m.ContributedMoney,
+                CoinsChange = m.CoinsChange,
+                BillsChange = m.BillsChange,
+                StatusName = m.StatusNavigation.Name,
+                LastSale = 0
+            }).ToList();
+
+            foreach (var machine in machines)
+            {
+                var machineSales = sales.Where(s => s.MachineId == machine.MachineId);
+                if (machineSales is null)
+                    continue;
+                machine.LastSale = (DateTime.Now - machineSales.Max(s => s.Timestamp)).Days;
+            }
+
+            response.Machines = machines;
 
             return response;
         }

@@ -9,17 +9,18 @@
       d:DesignHeight="450" d:DesignWidth="800"
       Title="MainPage" Loaded="Page_Loaded">
 
-    <Canvas>
+    <Canvas x:Name="MainCanvas">
         <DockPanel Width="400"
                HorizontalAlignment="Left"
                VerticalAlignment="Center"
                Background="White"
                MouseLeftButtonDown="TargetDockPanel_MouseLeftButtonDown"
-               MouseMove="EffishesyDockPanel_MouseMove"
+               MouseMove="TargetDockPanel_MouseMove"
                MouseLeftButtonUp="TargetDockPanel_MouseLeftButtonUp"
-               Canvas.Left="{Binding EffishesyDockPanelX}"
-               Canvas.Top="{Binding EffishesyDockPanelY}">
-            <DockPanel x:Name="EffishesyDockPanel" DockPanel.Dock="Top" Height="35" MaxHeight="35">
+               Canvas.Left="30"
+               Canvas.Top="30"
+                   Tag="0;0">
+            <DockPanel x:Name="EffishesyDockPanel" DockPanel.Dock="Top" Height="35">
                 <StackPanel Height="35" MaxHeight="35">
                     <TextBlock Text="Эффективность сети"
                        FontSize="18"
@@ -45,10 +46,11 @@
                    VerticalAlignment="Center"
                    Background="White"
                    MouseLeftButtonDown="TargetDockPanel_MouseLeftButtonDown"
-                   MouseMove="StateDockPanel_MouseMove"
+                   MouseMove="TargetDockPanel_MouseMove"
                    MouseLeftButtonUp="TargetDockPanel_MouseLeftButtonUp"
-                   Canvas.Left="{Binding StateDockPanelX}"
-                   Canvas.Top="{Binding StateDockPanelY}">
+                   Canvas.Left="460"
+                   Canvas.Top="30"
+                   Tag="1;0">
             <DockPanel DockPanel.Dock="Top">
                 <StackPanel>
                     <TextBlock Text="Состояние сети"
@@ -74,10 +76,11 @@ HorizontalAlignment="Left"
 VerticalAlignment="Center"
 Background="White"
                    MouseLeftButtonDown="TargetDockPanel_MouseLeftButtonDown"
-                   MouseMove="SummaryDockPanel_MouseMove"
+                   MouseMove="TargetDockPanel_MouseMove"
                    MouseLeftButtonUp="TargetDockPanel_MouseLeftButtonUp"
-Canvas.Left="{Binding SummaryDockPanelX}"
-Canvas.Top="{Binding SummaryDockPanelY}">
+                   Canvas.Left="890"
+                   Canvas.Top="30"
+                   Tag="2;0">
             <DockPanel DockPanel.Dock="Top">
                 <StackPanel>
                     <TextBlock Text="Сводка"
@@ -133,10 +136,11 @@ HorizontalAlignment="Left"
 VerticalAlignment="Center"
 Background="White"
                    MouseLeftButtonDown="TargetDockPanel_MouseLeftButtonDown"
-                   MouseMove="NewsDockPanel_MouseMove"
+                   MouseMove="TargetDockPanel_MouseMove"
                    MouseLeftButtonUp="TargetDockPanel_MouseLeftButtonUp"
-Canvas.Left="{Binding NewsDockPanelX}"
-Canvas.Top="{Binding NewsDockPanelY}">
+Canvas.Left="890"
+Canvas.Top="360"
+                   Tag="2;1">
             <DockPanel DockPanel.Dock="Top">
                 <StackPanel>
                     <TextBlock Text="Новости"
@@ -184,10 +188,11 @@ HorizontalAlignment="Left"
 VerticalAlignment="Center"
 Background="White"
                    MouseLeftButtonDown="TargetDockPanel_MouseLeftButtonDown"
-                   MouseMove="SalesDockPanel_MouseMove"
+                   MouseMove="TargetDockPanel_MouseMove"
                    MouseLeftButtonUp="TargetDockPanel_MouseLeftButtonUp"
-Canvas.Left="{Binding SalesDockPanelX}"
-Canvas.Top="{Binding SalesDockPanelY}">
+Canvas.Left="30"
+Canvas.Top="360"
+                   Tag="1;1">
             <DockPanel DockPanel.Dock="Top">
                 <StackPanel>
                     <TextBlock Text="Динамика продаж за последние 10 дней"

@@ -1,0 +1,186 @@
+﻿<Page x:Class="VendingWpf.Pages.MonitorMachinesPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:VendingWpf.Pages"
+      mc:Ignorable="d" 
+      d:DesignHeight="450" d:DesignWidth="800"
+      Title="MonitorMachines" Loaded="MonitorMachinesPage_Loaded">
+
+    <DockPanel>
+        <DockPanel DockPanel.Dock="Top">
+            <TextBlock Text="Монитор торговых автоматов" FontSize="20" DockPanel.Dock="Left" Foreground="#1099ff"/>
+            <StackPanel DockPanel.Dock="Right" Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Right">
+                <TextBlock Text="⊞" Margin="5" FontSize="17"/>
+                <TextBlock Text="≡" Foreground="#1099ff" Margin="5" FontSize="17"/>
+            </StackPanel>
+        </DockPanel>
+        <DockPanel DockPanel.Dock="Top">
+            <StackPanel DockPanel.Dock="Left">
+                <TextBlock Text="Общее состояние" Margin="5"/>
+                <StackPanel Orientation="Horizontal">
+                    <ToggleButton Tag="Сломан" Checked="GeneralFilterCheckBox_Checked" Unchecked="GeneralFilterCheckBox_Unchecked" IsChecked="True">
+                        <Image Source="/Images/DotRed24.png" Width="16" Margin="0,0,10,0"/>
+                    </ToggleButton>
+                    <ToggleButton Tag="Обслуживается" IsChecked="True" Checked="GeneralFilterCheckBox_Checked" Unchecked="GeneralFilterCheckBox_Unchecked">
+                        <Image Source="/Images/DotBlue24.png" Width="16" Margin="0,0,10,0"/>
+                    </ToggleButton>
+                    <ToggleButton Tag="Работает" IsChecked="True" Checked="GeneralFilterCheckBox_Checked" Unchecked="GeneralFilterCheckBox_Unchecked">
+                        <Image Source="/Images/DotGreen24.png" Width="16" Margin="0,0,10,0"/>
+                    </ToggleButton>
+                </StackPanel>
+            </StackPanel>
+            <StackPanel HorizontalAlignment="Center">
+                <TextBlock Text="Дополнительные статусы" Margin="5"/>
+                <StackPanel Orientation="Horizontal">
+                    <ToggleButton Tag="isDisconected" Checked="OfferFilterCheckBox_Checked" Unchecked="OfferFilterCheckBox_Unchecked">
+                        <Image Source="/Images/NoConnection.png" Width="16" Margin="0,0,10,0"/>
+                    </ToggleButton>
+                    <ToggleButton Tag="HasHardwareProblems" Checked="OfferFilterCheckBox_Checked" Unchecked="OfferFilterCheckBox_Unchecked">
+                        <Image Source="/Images/HardwareProblems.png" Width="16" Margin="0,0,10,0"/>
+                    </ToggleButton>
+                    <ToggleButton Tag="isNoSales" Checked="OfferFilterCheckBox_Checked" Unchecked="OfferFilterCheckBox_Unchecked">
+                        <Image Source="/Images/NoSales.png" Width="16" Margin="0,0,10,0"/>
+                    </ToggleButton>
+                    <ToggleButton Tag="isNoEncashment" Checked="OfferFilterCheckBox_Checked" Unchecked="OfferFilterCheckBox_Unchecked">
+                        <Image Source="/Images/NoEncashment.png" Width="16" Margin="0,0,10,0"/>
+                    </ToggleButton>
+                    <ToggleButton Tag="isNoService" Checked="OfferFilterCheckBox_Checked" Unchecked="OfferFilterCheckBox_Unchecked">
+                        <Image Source="/Images/NoService.png" Width="16" Margin="0,0,10,0"/>
+                    </ToggleButton>
+                    <ToggleButton Tag="isNoFillup" Checked="OfferFilterCheckBox_Checked" Unchecked="OfferFilterCheckBox_Unchecked">
+                        <Image Source="/Images/NoFillup.png" Width="16" Margin="0,0,10,0"/>
+                    </ToggleButton>
+                    <ToggleButton Tag="isFewChange" Checked="OfferFilterCheckBox_Checked" Unchecked="OfferFilterCheckBox_Unchecked">
+                        <Image Source="/Images/FewChange.png" Width="16" Margin="0,0,10,0"/>
+                    </ToggleButton>
+                    <ToggleButton Tag="isFewGoods" Checked="OfferFilterCheckBox_Checked" Unchecked="OfferFilterCheckBox_Unchecked">
+                        <Image Source="/Images/FewGoods.png" Width="16" Margin="0,0,10,0"/>
+                    </ToggleButton>
+                </StackPanel>
+            </StackPanel>
+        </DockPanel>
+        <StackPanel DockPanel.Dock="Top" Orientation="Horizontal">
+            <Button Content="Применить" Width="100" Margin="5" Click="ApplyFilterButton_Click"/>
+            <Button Content="Очистить" Width="100" Margin="5"/>
+        </StackPanel>
+        <DockPanel DockPanel.Dock="Bottom">
+            <StackPanel Orientation="Horizontal" DockPanel.Dock="Left">
+                <TextBlock Text="Итого автоматов: " Margin="5"/>
+                <TextBlock x:Name="TotalMachinestextBlock" VerticalAlignment="Center"/>
+                <TextBlock Text="(" VerticalAlignment="Center"/>
+                <TextBlock x:Name="BrokenTextBlock" Foreground="Red" Text="0" VerticalAlignment="Center"/>
+                <TextBlock Text="/" VerticalAlignment="Center"/>
+                <TextBlock x:Name="ServicedTextBlock" Foreground="#1099ff" Text="0" VerticalAlignment="Center"/>
+                <TextBlock Text="/" VerticalAlignment="Center"/>
+                <TextBlock x:Name="WorkingtextBlock" Foreground="Green" Text="0" VerticalAlignment="Center"/>
+                <TextBlock Text="); " VerticalAlignment="Center"/>
+                <TextBlock Text="Денег в автоматах: " Margin="5" VerticalAlignment="Center"/>
+                <TextBlock x:Name="TotalMoneyTextBlock" Text="0" VerticalAlignment="Center"/>
+                <TextBlock Text="p + " VerticalAlignment="Center"/>
+                <TextBlock x:Name="ChangeTextBlock" Text="0" VerticalAlignment="Center"/>
+                <TextBlock Text="p (Сдача)" VerticalAlignment="Center"/>
+            </StackPanel>
+            <Button Margin="5" Height="20" Width="140" DockPanel.Dock="Right" Click="ExportButton_Click">
+                <StackPanel Orientation="Horizontal">
+                    <Image Source="/Images/share.png" Width="20"/>
+                    <TextBlock Text="Экспорт в Excel"/>
+                </StackPanel>
+            </Button>
+            <StackPanel/>
+        </DockPanel>
+        <StackPanel>
+            <TextBlock Text="ООО Торговые автоматы"/>
+            <DataGrid
+                x:Name="MachinesDataGrid"
+                IsReadOnly="True"
+                CanUserAddRows="False"
+                CanUserDeleteRows="False"
+                AutoGenerateColumns="False"
+                ItemsSource="{Binding Machines}">
+                <DataGrid.Resources>
+                    <Style x:Key="WrapText" TargetType="TextBlock">
+                        <Setter Property="TextWrapping" Value="Wrap"/>
+                    </Style>
+                </DataGrid.Resources>
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="№"/>
+                    <DataGridTemplateColumn Header="Торговый автомат">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <DockPanel>
+                                    <Image DockPanel.Dock="Left" Width="25" Margin="2">
+                                        <Image.Style>
+                                            <Style TargetType="Image">
+                                                <Setter Property="Source" Value="/Images/DotRed24.png" />
+
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding StatusName}" Value="Обслуживается">
+                                                        <Setter Property="Source" Value="/Images/DotBlue24.png" />
+                                                    </DataTrigger>
+
+                                                    <DataTrigger Binding="{Binding StatusName}" Value="Работает">
+                                                        <Setter Property="Source" Value="/Images/DotGreen24.png" />
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </Image.Style>
+                                    </Image>
+                                    <StackPanel>
+                                        <TextBlock Style="{StaticResource WrapText}" Text="{Binding FullName}"/>
+                                        <TextBlock Style="{StaticResource WrapText}" Foreground="DarkGray" Text="{Binding FullDescription}"/>
+                                    </StackPanel>
+                                </DockPanel>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTemplateColumn Header="Денежные средства">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <StackPanel>
+                                    <StackPanel Orientation="Horizontal">
+                                        <Image Source="/Images/Bills.png" Width="20"/>
+                                        <TextBlock Text="{Binding BillsChange}"/>
+                                    </StackPanel>
+                                    <StackPanel Orientation="Horizontal">
+                                        <Image Source="/Images/Coins.png" Width="20"/>
+                                        <TextBlock Text="{Binding CoinsChange}"/>
+                                    </StackPanel>
+                                    <StackPanel Orientation="Horizontal">
+                                        <Image Source="/Images/Change.png" Width="20"/>
+                                        <TextBlock Text="{Binding FullChange}"/>
+                                    </StackPanel>
+                                </StackPanel>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTemplateColumn Header="События">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal">
+                                    <Image Source="/Images/Sale.png" Width="20"/>
+                                    <TextBlock Text="Прошло дней с последней продажи: " VerticalAlignment="Center"/>
+                                    <TextBlock VerticalAlignment="Center">
+                                        <TextBlock.Style>
+                                            <Style TargetType="TextBlock">
+                                                <Setter Property="Text" Value="{Binding LastSale}" />
+
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding LastSale}" Value="0">
+                                                        <Setter Property="Text" Value="Продаж не было" />
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </TextBlock.Style>
+                                    </TextBlock>
+                                </StackPanel>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                </DataGrid.Columns>
+            </DataGrid>
+            <TextBlock x:Name="NotFoundTextBlock" Text="ничего не найдено" Visibility="Collapsed"/>
+        </StackPanel>
+    </DockPanel>
+</Page>

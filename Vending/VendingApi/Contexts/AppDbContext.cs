@@ -289,6 +289,18 @@ public partial class AppDbContext : DbContext
             entity.HasIndex(e => e.SerialNumber, "UQ_VendingMachine_SerialNumber").IsUnique();
 
             entity.Property(e => e.MachineId).HasMaxLength(36);
+            entity.Property(e => e.BillsChange)
+                .HasDefaultValue(500m)
+                .HasColumnType("decimal(19, 4)");
+            entity.Property(e => e.CoinsChange)
+                .HasDefaultValue(100m)
+                .HasColumnType("decimal(19, 4)");
+            entity.Property(e => e.ContributedMoney)
+                .HasDefaultValue(1000m)
+                .HasColumnType("decimal(19, 4)");
+            entity.Property(e => e.IsConnection).HasDefaultValue(true);
+            entity.Property(e => e.IsEncanced).HasDefaultValue(true);
+            entity.Property(e => e.IsFilledUp).HasDefaultValue(true);
             entity.Property(e => e.KitOnlineId).HasMaxLength(10);
             entity.Property(e => e.Location).HasMaxLength(150);
             entity.Property(e => e.Name).HasMaxLength(100);
@@ -298,6 +310,7 @@ public partial class AppDbContext : DbContext
             entity.Property(e => e.RfidService).HasMaxLength(13);
             entity.Property(e => e.Status).HasMaxLength(25);
             entity.Property(e => e.TotalIncome).HasColumnType("decimal(19, 4)");
+            entity.Property(e => e.TotallGoods).HasDefaultValue(50);
             entity.Property(e => e.UserId).HasMaxLength(36);
 
             entity.HasOne(d => d.Company).WithMany(p => p.VendingMachines)

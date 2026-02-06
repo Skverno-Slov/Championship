@@ -73,7 +73,7 @@
                 </DockPanel>
                 <DockPanel HorizontalAlignment="Left" Width="220">
                     <Image Source="/Images/display.png" Width="20" Margin="5"/>
-                    <Button Content="Монитор ТА" Style="{StaticResource BurgerMenuText}"/>
+                    <Button Content="Монитор ТА" Style="{StaticResource BurgerMenuText}" Click="MonitorButton_Click"/>
                 </DockPanel>
                 <DockPanel HorizontalAlignment="Left" Width="220">
                     <Image Source="/Images/document.png" Width="20" Margin="5"/>

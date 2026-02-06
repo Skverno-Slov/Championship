@@ -133,5 +133,12 @@ namespace WEMM
             MainFrame.Navigate(new Uri("Pages/MainPage.xaml", UriKind.Relative));
             RouteTextBlock.Text = "Главная";
         }
+
+        private void MonitorButton_Click(object sender, RoutedEventArgs e)
+        {
+            //MainFrame.Navigate(new Uri("Pages/MonitorMachinesPage.xaml"), UriKind.Relative);
+            MainFrame.Navigate(new Uri("pack://application:,,,/Pages/MonitorMachinesPage.xaml"));
+            RouteTextBlock.Text = "Монитор ТА";
+        }
     }
 }

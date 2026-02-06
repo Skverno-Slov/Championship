@@ -29,16 +29,6 @@ namespace WEMMWpf.Pages
     /// </summary>
     public partial class MainPage : Page, INotifyPropertyChanged
     {
-        private double _effishesyDockPanelX;
-        private double _effishesyDockPanelY;
-        private double _stateDockPanelX;
-        private double _stateDockPanelY;
-        private double _summaryDockPanelX;
-        private double _summaryDockPanelY;
-        private double _newsDockPanelX;
-        private double _newsDockPanelY;
-        private double _salesDockPanelX;
-        private double _salesDockPanelY;
         private List<News> _news;
         private List<Sale> _sales;
         private SalesDto _salesToday;
@@ -46,9 +36,15 @@ namespace WEMMWpf.Pages
         private HttpClient _client = new();
         private EfficiencyResponceDto _efficiencyResponce;
 
-        private bool _isDragging;
         private Point _clickPosition;
+        private FrameworkElement? _clickedElement;
         private int _totalMachines;
+
+        const int GridBorderX = 30;
+        const int GridBorderY = 30;
+
+        const int GridStepX = 400 + GridBorderX;
+        const int GridStepY = 300 + GridBorderY;
 
         public MainPage()
         {
@@ -87,178 +83,81 @@ namespace WEMMWpf.Pages
             }
         }
 
-        public double EffishesyDockPanelX
-        {
-            get => _effishesyDockPanelX;
-            set
-            {
-                _effishesyDockPanelX = value;
-                OnPropertyChanged();
-            }
-        }
-
-        public double EffishesyDockPanelY
-        {
-            get => _effishesyDockPanelY;
-            set
-            {
-                _effishesyDockPanelY = value;
-                OnPropertyChanged();
-            }
-        }
-
-        public double StateDockPanelX
-        {
-            get => _stateDockPanelX;
-            set
-            {
-                _stateDockPanelX = value;
-                OnPropertyChanged();
-            }
-        }
-
-        public double StateDockPanelY
-        {
-            get => _stateDockPanelY;
-            set
-            {
-                _stateDockPanelY = value;
-                OnPropertyChanged();
-            }
-        }
-
-        public double SummaryDockPanelX
-        {
-            get => _summaryDockPanelX;
-            set
-            {
-                _summaryDockPanelX = value;
-                OnPropertyChanged();
-            }
-        }
-
-        public double SummaryDockPanelY
-        {
-            get => _summaryDockPanelY;
-            set
-            {
-                _summaryDockPanelY = value;
-                OnPropertyChanged();
-            }
-        }
-
-        public double NewsDockPanelX
-        {
-            get => _newsDockPanelX;
-            set
-            {
-                _newsDockPanelX = value;
-                OnPropertyChanged();
-            }
-        }
-
-        public double NewsDockPanelY
-        {
-            get => _newsDockPanelY;
-            set
-            {
-                _newsDockPanelY = value;
-                OnPropertyChanged();
-            }
-        }
-
-        public double SalesDockPanelX
-        {
-            get => _salesDockPanelX;
-            set
-            {
-                _salesDockPanelX = value;
-                OnPropertyChanged();
-            }
-        }
-
-        public double SalesDockPanelY
-        {
-            get => _salesDockPanelY;
-            set
-            {
-                _salesDockPanelY = value;
-                OnPropertyChanged();
-            }
-        }
-
-        private void SetStartPositions()
-        {
-            StateDockPanelX = 410;
-            SummaryDockPanelX = 820;
-            SalesDockPanelY = 300;
-            NewsDockPanelX = 820;
-            NewsDockPanelY = 300;
-        }
-
         private void TargetDockPanel_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            _isDragging = true;
-            var element = sender as FrameworkElement;
-            _clickPosition = e.GetPosition(element);
+            if(_clickedElement is not null)
+                return;
 
-            element.CaptureMouse();
+            _clickedElement = sender as FrameworkElement;
+            _clickPosition = e.GetPosition(_clickedElement);
+
+            _clickedElement?.CaptureMouse();
         }
 
-        private void EffishesyDockPanel_MouseMove(object sender, MouseEventArgs e)
+        private void TargetDockPanel_MouseMove(object sender, MouseEventArgs e)
         {
-            if (_isDragging)
+            if (_clickedElement is not null)
             {
-                EffishesyDockPanelX = e.GetPosition(this).X - _clickPosition.X;
-                EffishesyDockPanelY = e.GetPosition(this).Y - _clickPosition.Y;
+                var point = e.GetPosition(this);
+
+                Canvas.SetLeft(_clickedElement, point.X - _clickPosition.X);
+                Canvas.SetTop(_clickedElement, point.Y - _clickPosition.Y);
             }
         }
 
         private void TargetDockPanel_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
-            _isDragging = false;
-            (sender as FrameworkElement).ReleaseMouseCapture();
+            if(_clickedElement is null)
+                return;
+
+            _clickedElement?.ReleaseMouseCapture();
+
+            var currentPointX = e.GetPosition(this).X;
+            var currentPointY = e.GetPosition(this).Y;
+
+            var cellX = (int)(currentPointX / GridStepX);
+            var cellY = (int)(currentPointY / GridStepY);
+
+            var oldCell = _clickedElement.Tag.ToString().Split(';');
+
+            var oldCellX = Int32.Parse(oldCell[0]);
+            var oldCellY = Int32.Parse(oldCell[1]);
+
+            var newTag = $"{cellX};{cellY}";
+
+            var colizedElement = MainCanvas.Children
+                .OfType<FrameworkElement>()
+                .FirstOrDefault(e => e.Tag?.ToString() == newTag);
+
+            _clickedElement.Tag = newTag;
+            
+
+            Point correctedPoint = CalculatePosition(cellX, cellY);
+            Point colizedElementPoint = CalculatePosition(oldCellX, oldCellY);
+
+            SetCanvasPosition(correctedPoint, _clickedElement);
+            if(colizedElement != null)
+            {
+                colizedElement.Tag = $"{oldCellX};{oldCellY}";
+                SetCanvasPosition(colizedElementPoint, colizedElement);
+            }
+
+            _clickedElement = null;
         }
 
-        private void StateDockPanel_MouseMove(object sender, MouseEventArgs e)
+        private static Point CalculatePosition(int cellX, int cellY)
         {
-            if (_isDragging)
-            {
-                StateDockPanelX = e.GetPosition(this).X - _clickPosition.X;
-                StateDockPanelY = e.GetPosition(this).Y - _clickPosition.Y;
-            }
+            return new Point((cellX * GridStepX) + GridBorderX, (cellY * GridStepY) + GridBorderY);
         }
 
-        private void SummaryDockPanel_MouseMove(object sender, MouseEventArgs e)
+        private void SetCanvasPosition(Point point, FrameworkElement element)
         {
-            if (_isDragging)
-            {
-                SummaryDockPanelX = e.GetPosition(this).X - _clickPosition.X;
-                SummaryDockPanelY = e.GetPosition(this).Y - _clickPosition.Y;
-            }
-        }
-
-        private void NewsDockPanel_MouseMove(object sender, MouseEventArgs e)
-        {
-            if (_isDragging)
-            {
-                NewsDockPanelX = e.GetPosition(this).X - _clickPosition.X;
-                NewsDockPanelY = e.GetPosition(this).Y - _clickPosition.Y;
-            }
-        }
-
-        private void SalesDockPanel_MouseMove(object sender, MouseEventArgs e)
-        {
-            if (_isDragging)
-            {
-                SalesDockPanelX = e.GetPosition(this).X - _clickPosition.X;
-                SalesDockPanelY = e.GetPosition(this).Y - _clickPosition.Y;
-            }
+            Canvas.SetLeft(element, point.X);
+            Canvas.SetTop(element, point.Y);
         }
 
         private async void Page_Loaded(object sender, RoutedEventArgs e)
         {
-            SetStartPositions();
             SetClientProperties();
 
             await LoadGaugeEfficiencyChart();
